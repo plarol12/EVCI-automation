@@ -9,7 +9,6 @@
 
 - name: Apply patches for CVEs on EVCI nodes
   hosts: localhost
-  become: yes
   gather_facts: false
   connection: local
 
