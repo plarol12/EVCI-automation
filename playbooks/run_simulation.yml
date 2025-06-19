@@ -1,0 +1,48 @@
+---
+# Playbook: run_simulation.yml
+# Purpose: Launch Python attacker simulation inside a disposable virtualenv,
+#          parse stdout for CVE identifiers, and store them in vars/cves.yml.
+# Notes:
+#   * Variables entry_point, attacker_algo, weighted are provided by Ansible Tower Survey.
+#   * The set_stats step exposes 'patched_cves' to downstream workflow nodes.
+
+- name: Run attacker simulation and export CVE list
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    entry_point: "{{ survey_entry_point }}"
+    attacker_algo: "{{ survey_attacker_algo }}"
+    weighted: "{{ survey_weighted | default('false') }}"
+    venv_path: "/tmp/sim_venv"
+
+  tasks:
+    - name: Ensure simulation virtualenv with requirements
+      pip:
+        virtualenv: "{{ venv_path }}"
+        requirements: simulation/requirements.txt
+        virtualenv_site_packages: false
+
+    - name: Execute attacker_al_47.py
+      command: >
+        {{ venv_path }}/bin/python simulation/attacker_al_47.py
+        {{ entry_point }} {{ attacker_algo }} {{ weighted }}
+      register: sim_out
+      changed_when: false
+
+    - name: Extract unique CVE identifiers from simulation output
+      set_fact:
+        cve_list: "{{ sim_out.stdout | regex_findall('CVE-\\d{4}-\\d{4,}') | unique }}"
+
+    - name: Write CVE list to vars/cves.yml for patch playbook
+      copy:
+        dest: vars/cves.yml
+        content: |
+          ---
+          cve_list: {{ cve_list | to_nice_yaml(indent=2) }}
+      delegate_to: localhost
+
+    - name: Expose CVE list to workflow context
+      set_stats:
+        data:
+          patched_cves: "{{ cve_list }}"
