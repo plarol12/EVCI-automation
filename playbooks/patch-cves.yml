@@ -8,8 +8,10 @@
 # In production, extend patch_map based on vendor advisories.
 
 - name: Apply patches for CVEs on EVCI nodes
-  hosts: all
+  hosts: localhost
   become: yes
+  gather_facts: false
+  connection: local
 
   vars_files:
     - vars/cves.yml
