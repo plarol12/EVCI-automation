@@ -9,6 +9,7 @@
 - name: Run attacker simulation and export CVE list
   hosts: localhost
   gather_facts: false
+  connection: local
 
   vars:
     entry_point: "{{ survey_entry_point }}"
