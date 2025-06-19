@@ -11,7 +11,7 @@
 
   tasks:
     - name: Run attacker simulation script
-      command: >- python3 ../simulation/attacker_al_47.py {{ entry_point }} {{ attacker_algo }} {{ weighted }}
+      command: "python3 ../simulation/attacker_al_47.py {{ entry_point }} {{ attacker_algo }} {{ weighted }}"
       register: sim_out
       changed_when: false
       ignore_errors: yes
