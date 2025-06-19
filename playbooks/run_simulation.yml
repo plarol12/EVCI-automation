@@ -10,9 +10,10 @@
     weighted: "{{ survey_weighted | default('false') }}"
 
   tasks:
-      - name: Run attacker simulation script
-  command: python3 ../simulation/attacker_al_47.py {{ entry_point }} {{ attacker_algo }} {{ weighted }}
+    - name: Run attacker simulation script
+      command: >- python3 ../simulation/attacker_al_47.py {{ entry_point }} {{ attacker_algo }} {{ weighted }}
       register: sim_out
+      changed_when: false
       ignore_errors: yes
 
     - name: Check if simulation output looks valid
