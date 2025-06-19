@@ -10,16 +10,15 @@
     weighted: "{{ survey_weighted | default('false') }}"
 
   tasks:
-    - name: Install required Python packages
-      pip:
-        name:
-          - networkx
-          - matplotlib
-
-    - name: Run attacker simulation
+    - name: Run attacker simulation script
       command: python3 simulation/attacker_al_47.py {{ entry_point }} {{ attacker_algo }} {{ weighted }}
       register: sim_out
-      changed_when: false
+      ignore_errors: yes
+
+    - name: Check if simulation output looks valid
+      fail:
+        msg: "Simulation failed. Ensure 'networkx' and 'matplotlib' are installed in the Execution Environment."
+      when: sim_out.rc != 0
 
     - name: Extract CVEs from output
       set_fact:
