@@ -11,6 +11,7 @@
 
   tasks:
     - name: Run attacker simulation script
+<<<<<<< HEAD
       command: "python3 ../simulation/attacker_al_47.py {{ entry_point }} {{ attacker_algo }} {{ weighted }}"
       register: sim_out
       changed_when: false
@@ -28,11 +29,35 @@
     - name: Save CVEs to vars/cves.yml
       copy:
         dest: vars/cves.yml
+=======
+      command: >
+        python3 ../simulation/attacker_al_47.py
+        "{{ entry_point }}" "{{ attacker_algo }}" "{{ weighted }}"
+      register: sim_out
+      changed_when: false
+
+    - name: Fail if script crashed
+      fail:
+        msg: "Simulation failed"
+      when: sim_out.rc != 0
+
+    - name: Extract CVEs
+      set_fact:
+        cve_list: "{{ sim_out.stdout | regex_findall('CVE-\d{4}-\d{4,}') | unique }}"
+
+    - name: Save CVEs
+      copy:
+        dest: ../vars/cves.yml
+>>>>>>> 507b6f6 (Push working automation project: simulation and patching for AWX)
         content: |
           ---
           cve_list: {{ cve_list | to_nice_yaml(indent=2) }}
 
+<<<<<<< HEAD
     - name: Share CVEs for workflow
+=======
+    - name: Share CVEs
+>>>>>>> 507b6f6 (Push working automation project: simulation and patching for AWX)
       set_stats:
         data:
           patched_cves: "{{ cve_list }}"

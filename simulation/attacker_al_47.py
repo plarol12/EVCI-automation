@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import networkx as nx
 from collections import deque
 from candidate import Candidate
@@ -389,3 +390,25 @@ if __name__ == "__main__":
     
     G, hosts = create_network_graph(weighted=True)
     visualize_graph(G, most_exposed_path)
+=======
+import sys
+import networkx as nx
+
+entry = sys.argv[1]
+algo = sys.argv[2]
+weighted = sys.argv[3] == 'True'
+
+G = nx.Graph()
+G.add_edges_from([("CSMS", "CS1"), ("CS1", "CS2")])
+vulnerabilities = {
+    "CSMS": ["CVE-2021-1111", "CVE-2021-2222"],
+    "CS1": ["CVE-2022-3333"],
+    "CS2": ["CVE-2023-4444"]
+}
+
+path = nx.shortest_path(G, source=entry, target="CS2")
+print("Attacker path:", path)
+for node in path:
+    for cve in vulnerabilities.get(node, []):
+        print("Exploiting", cve)
+>>>>>>> 507b6f6 (Push working automation project: simulation and patching for AWX)

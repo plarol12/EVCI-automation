@@ -1,4 +1,5 @@
 ---
+<<<<<<< HEAD
 # Playbook: patch-cves.yml
 # Purpose: Install OS packages that remediate the CVEs produced by run_simulation.yml
 # Variables:
@@ -8,11 +9,15 @@
 # In production, extend patch_map based on vendor advisories.
 
 - name: Apply patches for CVEs on EVCI nodes
+=======
+- name: Simulate patching CVEs
+>>>>>>> 507b6f6 (Push working automation project: simulation and patching for AWX)
   hosts: localhost
   gather_facts: false
   connection: local
 
   vars_files:
+<<<<<<< HEAD
     - vars/cves.yml
 
   vars:
@@ -47,3 +52,17 @@
         msg: "Reboot initiated by automated patching workflow"
         reboot_timeout: 600
       when: "'linux-image' in ansible_facts.packages"
+=======
+    - ../vars/cves.yml
+
+  tasks:
+    - name: Show patched CVEs
+      debug:
+        msg: "Simulated patch for CVEs: {{ cve_list }}"
+
+    - name: Save to log
+      copy:
+        dest: /tmp/patched_cves.log
+        content: |
+          [{{ ansible_date_time.iso8601 }}] Patched: {{ cve_list | join(', ') }}
+>>>>>>> 507b6f6 (Push working automation project: simulation and patching for AWX)
