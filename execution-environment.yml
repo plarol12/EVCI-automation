@@ -1,11 +1,13 @@
 version: 3
-images:
-  base_image:
-    name: quay.io/ansible/ansible-runner:latest
 
 dependencies:
-  python: requirements.txt
-<<<<<<< HEAD
+  python:
+    - networkx
+    - matplotlib
+  system: []
+  galaxy: requirements.yml
 
-=======
->>>>>>> 507b6f6 (Push working automation project: simulation and patching for AWX)
+additional_build_steps:
+  prepend_base:
+    - RUN pip install ansible-core ansible-runner
+
