@@ -1,0 +1,8 @@
+# playbooks/failure_handler.yml
+- name: Dummy failure handler
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - debug:
+        msg: "Simulation failed. Handled gracefully."
+
