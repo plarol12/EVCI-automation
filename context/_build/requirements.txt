@@ -1,2 +1,4 @@
+requests
+ansible
 networkx
 matplotlib

@@ -1,6 +1,4 @@
+requests
+ansible
 networkx
 matplotlib
-<<<<<<< HEAD
-
-=======
->>>>>>> 507b6f6 (Push working automation project: simulation and patching for AWX)

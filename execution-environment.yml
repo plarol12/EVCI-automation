@@ -1,13 +1,18 @@
 version: 3
 
+images:
+  base_image:
+    name: quay.io/ansible/awx-ee:24.1.0
+
 dependencies:
-  python:
-    - networkx
-    - matplotlib
+  python: requirements.txt
   system: []
-  galaxy: requirements.yml
+  ansible_core:
+    package_pip: ansible-core==2.14.6
+  ansible_runner:
+    package_pip: ansible-runner
 
 additional_build_steps:
-  prepend_base:
-    - RUN pip install ansible-core ansible-runner
+  append_final:
+    - COPY . /runner/project/
 
